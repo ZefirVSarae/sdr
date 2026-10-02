@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Поздравление защищено!</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: #000;
+    color: #e8eaed;
+    font-family: 'Google Sans', 'Product Sans', Roboto, Arial, sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    gap: 24px;
+  }
+
+  .wrapper {
+    border: 1px solid #1f1f1f;
+    padding: 44px 56px;
+    border-radius: 28px;
+    text-align: center;
+    max-width: 720px;
+    width: 100%;
+    background: radial-gradient(circle at 50% 0%, #0a0a0a, #000 70%);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+  .wrapper.hidden {
+    opacity: 0;
+    transform: scale(0.96);
+    pointer-events: none;
+  }
+
+  h1 {
+    font-size: clamp(28px, 6vw, 56px);
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin: 0 0 16px;
+    color: #ffffff;
+    line-height: 1.1;
+  }
+
+  h2 {
+    font-size: clamp(24px, 5vw, 44px);
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin: 0;
+    color: #ffffff;
+    line-height: 1.1;
+  }
+
+  .subtitle {
+    font-size: 15px;
+    font-weight: 400;
+    letter-spacing: 3px;
+    margin-bottom: 36px;
+    color: #9aa0a6;
+    text-transform: uppercase;
+  }
+
+  /* ---------- Пуш-уведомление ---------- */
+  .notification {
+    position: fixed;
+    top: 24px;
+    left: 50%;
+    transform: translate(-50%, -180%) scale(0.9);
+    opacity: 0;
+    width: min(380px, calc(100vw - 32px));
+    background: linear-gradient(180deg, #1f1f1f 0%, #171717 100%);
+    border: 1px solid #2a2a2a;
+    border-radius: 22px;
+    padding: 16px 20px;
+    box-shadow:
+      0 12px 40px rgba(0,0,0,0.75),
+      0 0 0 1px rgba(255,255,255,0.04) inset,
+      0 0 60px rgba(60,120,255,0.08);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    text-align: left;
+    z-index: 100;
+    transition:
+      transform 0.55s cubic-bezier(0.22, 1.4, 0.36, 1),
+      opacity 0.35s ease;
+    pointer-events: none;
+  }
+
+  .notification.show {
+    transform: translate(-50%, 0) scale(1);
+    opacity: 1;
+  }
+
+  .notif-icon {
+    flex-shrink: 0;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: #0d1a33;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    color: #8ab4f8;
+  }
+
+  .notif-content { flex: 1; min-width: 0; }
+
+  .notif-title {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #9aa0a6;
+    margin-bottom: 4px;
+  }
+
+  .notif-body {
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: 6px;
+    color: #ffffff;
+    font-variant-numeric: tabular-nums;
+    min-height: 32px;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  .notif-body.compact { font-size: 20px; letter-spacing: 3px; }
+
+  .notif-body .caret {
+    display: inline-block;
+    width: 2px;
+    height: 20px;
+    background: #8ab4f8;
+    margin-left: 4px;
+    vertical-align: middle;
+    animation: blink 1s steps(2) infinite;
+  }
+
+  @keyframes blink { 50% { opacity: 0; } }
+
+  /* ---------- Поле ввода ---------- */
+  .input-block {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .input-label {
+    font-size: 13px;
+    letter-spacing: 3px;
+    color: #9aa0a6;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  input[type="text"] {
+    background: #131313;
+    border: 1px solid #2a2a2a;
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: 12px;
+    text-align: center;
+    padding: 12px 20px;
+    border-radius: 16px;
+    width: 200px;
+    outline: none;
+    transition: all 0.2s;
+  }
+
+  input[type="text"]:focus {
+    border-color: #8ab4f8;
+    box-shadow: 0 0 0 4px rgba(138,180,248,0.15);
+  }
+
+  input[type="text"]::placeholder { color: #3c4043; letter-spacing: 6px; }
+  input[type="text"]:disabled { opacity: 0.5; }
+
+  .status {
+    min-height: 24px;
+    font-size: 14px;
+    letter-spacing: 2px;
+    font-weight: 500;
+    color: #9aa0a6;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .status.show { opacity: 1; }
+  .status.error { color: #f28b82; }
+  .status.ok    { color: #81c995; }
+
+  /* ---------- Тапок (шлёпанец) ---------- */
+  .tapok {
+    font-size: 130px;
+    margin-top: 10px;
+    opacity: 0;
+    transform: scale(0.3) rotate(-40deg);
+    transition: all 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+    pointer-events: none;
+    line-height: 1;
+  }
+
+  .tapok.open {
+    opacity: 1;
+    transform: scale(1) rotate(-12deg);
+    filter: drop-shadow(0 0 40px rgba(138,180,248,0.35))
+            drop-shadow(0 0 80px rgba(138,180,248,0.2));
+  }
+
+  /* ---------- Уровни 2-5 ---------- */
+  .stage2, .stage3, .stage4, .stage5 {
+    position: fixed;
+    inset: 0;
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.9s ease, visibility 0.9s;
+  }
+
+  .stage2 { z-index: 60; }
+  .stage3 { z-index: 70; }
+  .stage4 { z-index: 80; }
+  .stage5 { z-index: 90; }
+
+  .stage2.show, .stage3.show, .stage4.show, .stage5.show {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .stage2 .content, .stage3 .content, .stage4 .content, .stage5 .content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.9s ease 0.9s, transform 0.9s ease 0.9s;
+  }
+
+  .stage2.show .content, .stage3.show .content,
+  .stage4.show .content, .stage5.show .content {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ---------- Крестики-нолики ---------- */
+  .game-board {
+    display: grid;
+    grid-template-columns: repeat(3, 100px);
+    grid-template-rows: repeat(3, 100px);
+    gap: 8px;
+    margin: 20px 0;
+  }
+
+  .game-cell {
+    background: #131313;
+    border: 1px solid #2a2a2a;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 56px;
+    font-weight: 700;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+    user-select: none;
+  }
+
+  .game-cell:hover { background: #1c1c1c; border-color: #3c4043; }
+  .game-cell.x { color: #8ab4f8; }
+  .game-cell.o { color: #f28b82; }
+  .game-cell.disabled { cursor: default; pointer-events: none; }
+
+  .coord {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    color: #8ab4f8;
+    margin: 10px 0 20px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ---------- Кнопка воспроизведения ---------- */
+  .play-btn {
+    background: #131313;
+    border: 1px solid #2a2a2a;
+    border-radius: 999px;
+    padding: 14px 28px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    color: #e8eaed;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.2s ease;
+    outline: none;
+    user-select: none;
+    margin: 20px 0;
+  }
+
+  .play-btn:hover { background: #1c1c1c; border-color: #3c4043; transform: translateY(-1px); }
+  .play-btn:active { transform: scale(0.97); }
+  .play-btn .icon { font-size: 22px; }
+
+  /* ---------- УРОВЕНЬ 6: ПРАНК ---------- */
+  .stage6 {
+    position: fixed;
+    inset: 0;
+    background: #000;
+    z-index: 95;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.9s ease, visibility 0.9s;
+    padding: 40px 20px;
+  }
+
+  .stage6.show { opacity: 1; visibility: visible; }
+
+  .prank-text {
+    font-size: clamp(22px, 5vw, 48px);
+    font-weight: 700;
+    color: #ffffff;
+    text-align: center;
+    letter-spacing: 1px;
+    line-height: 1.3;
+    padding: 0 20px;
+    transition: opacity 0.6s ease;
+    opacity: 0;
+    max-width: 90vw;
+  }
+
+  .prank-timer {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: clamp(100px, 25vw, 280px);
+    font-weight: 700;
+    color: #ff1e1e;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 4px;
+    display: none;
+    text-shadow:
+      0 0 30px rgba(255,0,0,0.9),
+      0 0 70px rgba(255,0,0,0.6),
+      0 0 120px rgba(255,0,0,0.4);
+    animation: pulse 1s ease-in-out infinite;
+  }
+
+  .prank-timer.show { display: block; }
+
+  @keyframes pulse {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); }
+    50%      { transform: translate(-50%, -50%) scale(1.05); }
+  }
+
+  /* ---------- ФИНАЛ (белый фон + картинка) ---------- */
+  .final-stage {
+    position: fixed;
+    inset: 0;
+    background: #ffffff;
+    z-index: 96;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 1.2s ease, visibility 1.2s;
+    overflow: hidden;
+  }
+
+  .final-stage.show { opacity: 1; visibility: visible; }
+
+  .final-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    user-select: none;
+    -webkit-user-drag: none;
+  }
+
+  .sdr {
+    position: relative;
+    z-index: 2;
+    font-size: clamp(60px, 16vw, 180px);
+    font-weight: 700;
+    color: #000;
+    letter-spacing: 12px;
+    cursor: pointer;
+    user-select: none;
+    padding: 20px 40px;
+    text-shadow:
+      0 0 20px rgba(255,255,255,0.9),
+      0 0 40px rgba(255,255,255,0.8),
+      0 0 60px rgba(255,255,255,0.6);
+    transition: transform 0.15s ease;
+  }
+
+  .sdr:active { transform: scale(0.94); }
+
+  @media (max-width: 480px) {
+    .wrapper { padding: 32px 24px; }
+    .notif-body { font-size: 22px; letter-spacing: 4px; }
+    .notif-body.compact { font-size: 17px; letter-spacing: 2px; }
+    .tapok { font-size: 100px; }
+    .game-board {
+      grid-template-columns: repeat(3, 80px);
+      grid-template-rows: repeat(3, 80px);
+    }
+    .game-cell { font-size: 44px; }
+    .coord { font-size: 22px; letter-spacing: 2px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Пуш-уведомление -->
+<div class="notification" id="notification">
+  <div class="notif-icon">🔔</div>
+  <div class="notif-content">
+    <div class="notif-title" id="notifTitle">Код Морзе</div>
+    <div class="notif-body" id="notifBody"><span id="notifText"></span><span class="caret"></span></div>
+  </div>
+</div>
+
+<!-- УРОВЕНЬ 1 -->
+<div class="wrapper" id="stage1">
+  <h1>ПОЗДРАВЛЕНИЕ ЗАЩИЩЕНО!</h1>
+  <p class="subtitle">Код придёт в уведомлении</p>
+
+  <div class="input-block">
+    <div class="input-label">Введи код</div>
+    <input type="text" id="codeInput" placeholder="--" maxlength="2" autocomplete="off" inputmode="numeric">
+    <div class="status" id="status"></div>
+  </div>
+
+  <div class="tapok" id="tapok">🩴</div>
+</div>
+
+<!-- УРОВЕНЬ 2 -->
+<div class="stage2" id="stage2">
+  <div class="content">
+    <h2>НОВЫЙ КОД</h2>
+    <p class="subtitle" style="margin-top:14px;">Введи новое число</p>
+    <div class="input-block" style="margin-top:0;">
+      <div class="input-label">Введи код</div>
+      <input type="text" id="codeInput2" placeholder="--" maxlength="2" autocomplete="off" inputmode="numeric">
+      <div class="status" id="status2"></div>
+    </div>
+    <div class="tapok" id="tapok2">🩴</div>
+  </div>
+</div>
+
+<!-- УРОВЕНЬ 3 — крестики-нолики -->
+<div class="stage3" id="stage3">
+  <div class="content">
+    <h2>КРЕСТИКИ-НОЛИКИ</h2>
+    <p class="subtitle" style="margin-top:14px;">Победи, чтобы продолжить</p>
+    <div class="game-board" id="gameBoard">
+      <div class="game-cell" data-index="0"></div>
+      <div class="game-cell" data-index="1"></div>
+      <div class="game-cell" data-index="2"></div>
+      <div class="game-cell" data-index="3"></div>
+      <div class="game-cell" data-index="4"></div>
+      <div class="game-cell" data-index="5"></div>
+      <div class="game-cell" data-index="6"></div>
+      <div class="game-cell" data-index="7"></div>
+      <div class="game-cell" data-index="8"></div>
+    </div>
+    <div class="status" id="gameStatus" style="margin-top:20px;"></div>
+  </div>
+</div>
+
+<!-- УРОВЕНЬ 4 — слово -->
+<div class="stage4" id="stage4">
+  <div class="content">
+    <h2>ФИНАЛЬНЫЙ КОД</h2>
+    <p class="subtitle" style="margin-top:14px;">Введи слово</p>
+    <div class="coord">54.741982, 56.024834</div>
+    <div class="input-block" style="margin-top:0;">
+      <div class="input-label">Введи слово</div>
+      <input type="text" id="wordInput" placeholder="..." autocomplete="off" style="width: 280px; letter-spacing: 4px; font-size: 24px;">
+      <div class="status" id="wordStatus"></div>
+    </div>
+  </div>
+</div>
+
+<!-- УРОВЕНЬ 5 — аудио-код -->
+<div class="stage5" id="stage5">
+  <div class="content">
+    <h2>АУДИО-КОД</h2>
+    <p class="subtitle" style="margin-top:14px;">Прослушай и введи код</p>
+    <button class="play-btn" id="playAudioBtn">
+      <span class="icon">🔊</span> ВОСПРОИЗВЕСТИ
+    </button>
+    <div class="input-block" style="margin-top:0;">
+      <div class="input-label">Введи код</div>
+      <input type="text" id="audioCodeInput" placeholder="----" maxlength="4" autocomplete="off" inputmode="numeric">
+      <div class="status" id="audioStatus"></div>
+    </div>
+    <div class="tapok" id="tapok5">🩴</div>
+  </div>
+</div>
+
+<!-- УРОВЕНЬ 6 — ПРАНК -->
+<div class="stage6" id="stage6">
+  <div class="prank-text" id="prankText"></div>
+  <div class="prank-timer" id="prankTimer"></div>
+</div>
+
+<!-- ФИНАЛ -->
+<div class="final-stage" id="finalStage">
+  <img class="final-img" id="finalImg"
+       src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8cSw-38hPczksnJIPSu1YLE31MMk51bR-74NUsoMlG2NKIU6tCWWjqcE&s=10"
+       alt="">
+  <div class="sdr" id="sdrText">Сдр</div>
+</div>
+
+<script>
+  // ---------- Подсказки ----------
+  const HINTS = {
+    1: { title: 'Код Морзе',    text: '----- ..---',    compact: false },
+    2: { title: 'Двоичный код', text: '110001 110000',  compact: true  }
+  };
+
+  const notification = document.getElementById('notification');
+  const notifTitle   = document.getElementById('notifTitle');
+  const notifText    = document.getElementById('notifText');
+
+  const stage1  = document.getElementById('stage1');
+  const input1  = document.getElementById('codeInput');
+  const status1 = document.getElementById('status');
+  const tapok1  = document.getElementById('tapok');
+
+  const stage2  = document.getElementById('stage2');
+  const input2  = document.getElementById('codeInput2');
+  const status2 = document.getElementById('status2');
+  const tapok2  = document.getElementById('tapok2');
+
+  const stage3  = document.getElementById('stage3');
+  const gameStatus = document.getElementById('gameStatus');
+
+  const stage4  = document.getElementById('stage4');
+  const wordInput = document.getElementById('wordInput');
+  const wordStatus = document.getElementById('wordStatus');
+
+  const stage5  = document.getElementById('stage5');
+  const playAudioBtn = document.getElementById('playAudioBtn');
+  const audioCodeInput = document.getElementById('audioCodeInput');
+  const audioStatus = document.getElementById('audioStatus');
+  const tapok5 = document.getElementById('tapok5');
+
+  const stage6 = document.getElementById('stage6');
+  const prankText = document.getElementById('prankText');
+  const prankTimer = document.getElementById('prankTimer');
+  const finalStage = document.getElementById('finalStage');
+  const sdrText = document.getElementById('sdrText');
+
+  let currentHint = HINTS[1];
+  let typeTimer = null;
+  let hideTimer = null;
+  let autoTimer = null;
+
+  // ---------- Показ уведомления ----------
+  function showNotification() {
+    clearTimeout(hideTimer);
+    clearTimeout(typeTimer);
+    notifTitle.textContent = currentHint.title;
+    notifText.textContent = '';
+    notification.classList.toggle('compact', currentHint.compact);
+    notification.classList.remove('show');
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => notification.classList.add('show'));
+    });
+    const text = currentHint.text;
+    let i = 0;
+    (function step() {
+      if (i < text.length) {
+        const ch = text[i++];
+        notifText.textContent += ch;
+        typeTimer = setTimeout(step, ch === ' ' ? 220 : 130);
+      } else {
+        hideTimer = setTimeout(() => notification.classList.remove('show'), 5000);
+      }
+    })();
+  }
+
+  function scheduleNext(delay = 12000) {
+    clearTimeout(autoTimer);
+    autoTimer = setTimeout(() => {
+      showNotification();
+      scheduleNext();
+    }, delay);
+  }
+
+  // ---------- Уровень 1 ----------
+  input1.addEventListener('input', () => {
+    const val = input1.value.trim();
+    if (val === '02') {
+      status1.textContent = '✓ Доступ разрешён';
+      status1.className = 'status show ok';
+      tapok1.classList.add('open');
+      input1.disabled = true;
+      input1.blur();
+      setTimeout(goToStage2, 1100);
+    } else if (val.length === 0) {
+      status1.className = 'status';
+      tapok1.classList.remove('open');
+    } else if (val.length === 2) {
+      status1.textContent = 'Неверный код';
+      status1.className = 'status show error';
+      tapok1.classList.remove('open');
+    } else {
+      status1.className = 'status';
+      tapok1.classList.remove('open');
+    }
+  });
+
+  function goToStage2() {
+    clearTimeout(autoTimer);
+    clearTimeout(hideTimer);
+    notification.classList.remove('show');
+    stage1.classList.add('hidden');
+    stage2.classList.add('show');
+    currentHint = HINTS[2];
+    setTimeout(() => {
+      input2.focus();
+      showNotification();
+      scheduleNext();
+    }, 1600);
+  }
+
+  // ---------- Уровень 2 ----------
+  input2.addEventListener('input', () => {
+    const val = input2.value.trim();
+    if (val === '10') {
+      status2.textContent = '✓ Доступ разрешён';
+      status2.className = 'status show ok';
+      tapok2.classList.add('open');
+      input2.disabled = true;
+      input2.blur();
+      clearTimeout(autoTimer);
+      setTimeout(() => notification.classList.remove('show'), 1200);
+      setTimeout(goToStage3, 1500);
+    } else if (val.length === 0) {
+      status2.className = 'status';
+      tapok2.classList.remove('open');
+    } else if (val.length === 2) {
+      status2.textContent = 'Неверный код';
+      status2.className = 'status show error';
+      tapok2.classList.remove('open');
+    } else {
+      status2.className = 'status';
+      tapok2.classList.remove('open');
+    }
+  });
+
+  function goToStage3() {
+    stage2.classList.remove('show');
+    stage3.classList.add('show');
+    resetGame();
+  }
+
+  // ========== ИГРА ==========
+  let board = ['', '', '', '', '', '', '', '', ''];
+  let currentPlayer = 'X';
+  let gameActive = true;
+  const winPatterns = [
+    [0,1,2],[3,4,5],[6,7,8],
+    [0,3,6],[1,4,7],[2,5,8],
+    [0,4,8],[2,4,6]
+  ];
+
+  function checkWin(player) {
+    return winPatterns.some(p => p.every(i => board[i] === player));
+  }
+
+  function makeMove(index, player) {
+    board[index] = player;
+    const cell = document.querySelector(`.game-cell[data-index="${index}"]`);
+    cell.textContent = player;
+    cell.classList.add(player.toLowerCase());
+    cell.classList.add('disabled');
+  }
+
+  function resetGame() {
+    board = ['', '', '', '', '', '', '', '', ''];
+    currentPlayer = 'X';
+    gameActive = true;
+    document.querySelectorAll('.game-cell').forEach(cell => {
+      cell.textContent = '';
+      cell.classList.remove('x', 'o', 'disabled');
+    });
+    gameStatus.textContent = '';
+    gameStatus.className = 'status';
+  }
+
+  function aiMove() {
+    if (!gameActive) return;
+    let move = -1;
+    const smartChance = Math.random() < 0.2;
+    if (smartChance) {
+      for (let i = 0; i < 9; i++) {
+        if (board[i] === '') {
+          board[i] = 'O';
+          if (checkWin('O')) { move = i; board[i] = ''; break; }
+          board[i] = '';
+        }
+      }
+      if (move === -1) {
+        for (let i = 0; i < 9; i++) {
+          if (board[i] === '') {
+            board[i] = 'X';
+            if (checkWin('X')) { move = i; board[i] = ''; break; }
+            board[i] = '';
+          }
+        }
+      }
+    }
+    if (move === -1) {
+      const empty = [];
+      for (let i = 0; i < 9; i++) if (board[i] === '') empty.push(i);
+      if (empty.length) move = empty[Math.floor(Math.random() * empty.length)];
+    }
+    if (move !== -1) {
+      makeMove(move, 'O');
+      if (checkWin('O')) {
+        gameActive = false;
+        gameStatus.textContent = 'Ты проиграл! Попробуй снова';
+        gameStatus.className = 'status show error';
+        setTimeout(resetGame, 1500);
+        return;
+      } else if (board.every(c => c !== '')) {
+        gameActive = false;
+        gameStatus.textContent = 'Ничья! Попробуй ещё раз';
+        gameStatus.className = 'status show error';
+        setTimeout(resetGame, 1500);
+        return;
+      }
+      currentPlayer = 'X';
+    }
+  }
+
+  document.querySelectorAll('.game-cell').forEach(cell => {
+    cell.addEventListener('click', (e) => {
+      const index = parseInt(e.target.dataset.index);
+      if (!gameActive || currentPlayer !== 'X' || board[index] !== '') return;
+      makeMove(index, 'X');
+      if (checkWin('X')) {
+        gameActive = false;
+        gameStatus.textContent = '✓ Ты победил! Переход...';
+        gameStatus.className = 'status show ok';
+        setTimeout(() => {
+          stage3.classList.remove('show');
+          stage4.classList.add('show');
+          setTimeout(() => wordInput.focus(), 800);
+        }, 1500);
+        return;
+      } else if (board.every(c => c !== '')) {
+        gameActive = false;
+        gameStatus.textContent = 'Ничья! Попробуй ещё раз';
+        gameStatus.className = 'status show error';
+        setTimeout(resetGame, 1500);
+        return;
+      }
+      currentPlayer = 'O';
+      setTimeout(aiMove, 400);
+    });
+  });
+
+  // ========== УРОВЕНЬ 4: СЛОВО ==========
+  wordInput.addEventListener('input', () => {
+    const raw = wordInput.value.trim().toLowerCase();
+    const val = raw.replace(/\s+/g, ' ');
+    const valid = [
+      'дом', 'бабушка', 'бабушки',
+      'дом бабушка', 'бабушки дом',
+      'бабушка дом', 'дом бабушки'
+    ].includes(val);
+    if (valid) {
+      wordStatus.textContent = '✓ Верно! Переход...';
+      wordStatus.className = 'status show ok';
+      wordInput.disabled = true;
+      wordInput.blur();
+      setTimeout(() => {
+        stage4.classList.remove('show');
+        stage5.classList.add('show');
+        setTimeout(() => playAudioBtn.focus(), 800);
+      }, 1500);
+    } else if (val.length === 0) {
+      wordStatus.className = 'status';
+    } else {
+      wordStatus.textContent = 'Неверное слово';
+      wordStatus.className = 'status show error';
+    }
+  });
+
+  // ========== УРОВЕНЬ 5: АУДИО ==========
+  const AUDIO_CODE = '0210';
+
+  function speakCode() {
+    if (!('speechSynthesis' in window)) {
+      audioStatus.textContent = 'Браузер не поддерживает аудио';
+      audioStatus.className = 'status show error';
+      return;
+    }
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance('0 2 1 0');
+    utterance.lang = 'ru-RU';
+    utterance.rate = 0.5;
+    utterance.pitch = 0.8 + Math.random() * 0.4;
+    utterance.volume = 1;
+    const voices = window.speechSynthesis.getVoices();
+    if (voices.length > 0) {
+      const ruVoices = voices.filter(v => v.lang.startsWith('ru'));
+      const pool = ruVoices.length > 0 ? ruVoices : voices;
+      utterance.voice = pool[Math.floor(Math.random() * pool.length)];
+    }
+    window.speechSynthesis.speak(utterance);
+  }
+
+  playAudioBtn.addEventListener('click', speakCode);
+
+  audioCodeInput.addEventListener('input', () => {
+    const val = audioCodeInput.value.trim();
+    if (val === AUDIO_CODE) {
+      audioStatus.textContent = '✓ Поздравление разблокировано!';
+      audioStatus.className = 'status show ok';
+      audioCodeInput.disabled = true;
+      audioCodeInput.blur();
+      tapok5.classList.add('open');
+      setTimeout(startPrank, 1500);
+    } else if (val.length === 0) {
+      audioStatus.className = 'status';
+      tapok5.classList.remove('open');
+    } else if (val.length === 4) {
+      audioStatus.textContent = 'Неверный код';
+      audioStatus.className = 'status show error';
+      tapok5.classList.remove('open');
+    } else {
+      audioStatus.className = 'status';
+      tapok5.classList.remove('open');
+    }
+  });
+
+  // ========== УРОВЕНЬ 6: ПРАНК ==========
+  let fullscreenInterval = null;
+  let freddyAudio = null;
+  let finalAudio = null;
+  let musicIndex = 0;
+  let countdownInterval = null;
+
+  const FINAL_TRACKS = [
+    'https://www.myinstants.com/media/sounds/rzhd-pribytie-poezda.mp3',
+    'https://www.myinstants.com/media/sounds/odin-khamamm-am-am-am.mp3',
+    'https://www.myinstants.com/media/sounds/litit-shakhed-z-motorchikom_zpq2bjT.mp3'
+  ];
+
+  function startPrank() {
+    stage5.classList.remove('show');
+    stage6.classList.add('show');
+
+    // Текст 1
+    prankText.textContent = 'Да, тебя заебало все разшифровывать..';
+    requestAnimationFrame(() => { prankText.style.opacity = 1; });
+
+    // Текст 2 через 2 сек
+    setTimeout(() => {
+      prankText.style.opacity = 0;
+      setTimeout(() => {
+        prankText.textContent = 'Так что..';
+        prankText.style.opacity = 1;
+      }, 600);
+    }, 2000);
+
+    // Запуск пранка через 4 сек (после обоих текстов)
+    setTimeout(startCountdown, 4200);
+  }
+
+  function tryFullscreen() {
+    const el = document.documentElement;
+    const fn = el.requestFullscreen || el.webkitRequestFullscreen ||
+               el.mozRequestFullScreen || el.msRequestFullscreen;
+    if (fn && !document.fullscreenElement) {
+      try {
+        const res = fn.call(el);
+        if (res && res.catch) res.catch(() => {});
+      } catch (e) {}
+    }
+  }
+
+  function startCountdown() {
+    // Полный экран каждую секунду
+    tryFullscreen();
+    fullscreenInterval = setInterval(tryFullscreen, 1000);
+
+    // Музыка
+    freddyAudio = new Audio('https://www.myinstants.com/media/sounds/freddy-countdown.mp3');
+    freddyAudio.volume = 1;
+    freddyAudio.play().catch(e => console.log('freddy audio error', e));
+
+    // Прячем текст, показываем таймер
+    prankText.style.opacity = 0;
+    setTimeout(() => { prankText.style.display = 'none'; }, 500);
+    prankTimer.classList.add('show');
+
+    let remaining = 30;
+    let started = false;
+
+    function beginTick() {
+      if (started) return;
+      started = true;
+      remaining = Math.max(1, Math.ceil(freddyAudio.duration || 30));
+      prankTimer.textContent = remaining;
+      countdownInterval = setInterval(() => {
+        remaining--;
+        if (remaining <= 0) {
+          clearInterval(countdownInterval);
+          prankTimer.textContent = '0';
+          onCountdownEnd();
+        } else {
+          prankTimer.textContent = remaining;
+        }
+      }, 1000);
+    }
+
+    if (freddyAudio.readyState >= 1 && isFinite(freddyAudio.duration) && freddyAudio.duration > 0) {
+      beginTick();
+    } else {
+      freddyAudio.addEventListener('loadedmetadata', beginTick, { once: true });
+      // Fallback: если метаданные не подгрузятся за 2 сек — стартуем с 30
+      setTimeout(() => { if (!started) beginTick(); }, 2000);
+    }
+
+    freddyAudio.addEventListener('ended', () => {
+      clearInterval(countdownInterval);
+      onCountdownEnd();
+    }, { once: true });
+  }
+
+  let prankEnded = false;
+
+  function onCountdownEnd() {
+    if (prankEnded) return;
+    prankEnded = true;
+
+    clearInterval(fullscreenInterval);
+    clearInterval(countdownInterval);
+    if (freddyAudio) { freddyAudio.pause(); freddyAudio = null; }
+    prankTimer.classList.remove('show');
+
+    // Показываем "Лан пранк"
+    prankText.style.display = 'flex';
+    prankText.style.opacity = 0;
+    prankText.textContent = 'Лан пранк';
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => { prankText.style.opacity = 1; });
+    });
+
+    // Через 2 сек — белый финал
+    setTimeout(showFinal, 2000);
+  }
+
+  function showFinal() {
+    stage6.classList.remove('show');
+    finalStage.classList.add('show');
+
+    playFinalTrack(0);
+  }
+
+  function playFinalTrack(index) {
+    if (finalAudio) {
+      try { finalAudio.pause(); } catch (e) {}
+      finalAudio = null;
+    }
+    musicIndex = index;
+    finalAudio = new Audio(FINAL_TRACKS[index]);
+    finalAudio.loop = true;
+    finalAudio.volume = 1;
+    finalAudio.play().catch(e => console.log('final audio error', e));
+  }
+
+  sdrText.addEventListener('click', () => {
+    const next = (musicIndex + 1) % FINAL_TRACKS.length;
+    playFinalTrack(next);
+  });
+
+  // ---------- Старт ----------
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      showNotification();
+      scheduleNext();
+    }, 900);
+  });
+</script>
+
+</body>
+</html>
